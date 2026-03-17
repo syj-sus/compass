@@ -10,8 +10,7 @@
             --bg: #0e1012;
             --accent: #e67e22;
             --text: #ffffff;
-            --text-dim: #94a3b8;
-            --card-radius: 16px;
+            --card-radius: 20px;
         }
 
         * { box-sizing: border-box; }
@@ -20,7 +19,7 @@
             background: var(--bg); 
             color: var(--text); 
             font-family: 'Montserrat', sans-serif; 
-            overflow-x: hidden; 
+            overflow: hidden; /* Prevent vertical body scroll */
         }
 
         .hero-bg {
@@ -28,92 +27,80 @@
             background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.7)), 
                         url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1470') center/cover;
             z-index: -1;
-            pointer-events: none; /* Critical: Stops background from blocking scrolls */
-        }
-
-        /* --- LOGO --- */
-        .logo { display: flex; align-items: center; font-weight: 900; letter-spacing: 6px; font-size: 28px; color: var(--accent); cursor: pointer; text-transform: uppercase; }
-        .dot { display: inline-block; animation: pushDot 3s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
-        @keyframes pushDot {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(20px) rotate(15deg); margin-left: 10px; filter: drop-shadow(-5px 0 5px rgba(230, 126, 34, 0.4)); }
+            pointer-events: none;
         }
 
         /* --- NAVIGATION --- */
         .navbar {
-            position: sticky; top: 0; width: 100%; z-index: 100;
+            position: fixed; top: 0; width: 100%; z-index: 100;
             display: flex; align-items: center; justify-content: space-between; 
-            padding: 20px 60px; background: rgba(14, 16, 18, 0.95);
+            padding: 20px 60px; background: rgba(14, 16, 18, 0.8);
             backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .mode-tag { font-size: 9px; font-weight: 900; letter-spacing: 2px; color: var(--accent); border: 1px solid var(--accent); padding: 4px 8px; border-radius: 4px; }
+        .logo { font-weight: 900; letter-spacing: 6px; font-size: 24px; color: var(--accent); cursor: pointer; }
+        .mode-tag { font-size: 10px; border: 1px solid var(--accent); padding: 4px 8px; border-radius: 4px; color: var(--accent); }
 
-        .header-section { padding: 80px 60px 20px 60px; }
-        .breadcrumb { font-size: 11px; font-weight: 900; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; cursor: pointer; margin-bottom: 15px; display: none; }
-        .title-display { font-size: clamp(40px, 8vw, 100px); font-weight: 900; text-transform: uppercase; letter-spacing: -4px; margin: 0; line-height: 0.9; }
+        .header-section { padding: 120px 60px 0 60px; position: relative; z-index: 10; }
+        .breadcrumb { font-size: 11px; font-weight: 900; color: var(--accent); cursor: pointer; margin-bottom: 10px; display: none; }
+        .title-display { font-size: clamp(40px, 8vw, 90px); font-weight: 900; letter-spacing: -4px; margin: 0; text-transform: uppercase; }
 
-        /* --- DYNAMO GRID --- */
+        /* --- THE DYNAMO ENGINE (CSS) --- */
         .grid {
             display: flex;
             flex-wrap: nowrap;
             overflow-x: auto;
             overflow-y: hidden;
             width: 100vw;
-            padding: 80px 45vw; /* Centers first card on desktop */
-            gap: 60px;
-            scroll-snap-type: x mandatory;
-            perspective: 2000px;
-            scroll-behavior: smooth;
-            height: 700px;
+            height: 70vh;
+            padding: 0 45vw; /* Initial centering */
             align-items: center;
+            gap: 50px;
+            scroll-snap-type: x proximity;
+            perspective: 1500px; /* Essential for 3D depth */
             -webkit-overflow-scrolling: touch;
-            touch-action: pan-x; /* Essential for mobile touch */
-            transform: translateZ(0);
+            scrollbar-width: none; /* Hide scrollbar Firefox */
         }
         .grid::-webkit-scrollbar { display: none; }
 
-        /* --- CARDS --- */
         .card {
-            flex: 0 0 400px; height: 550px; background-size: cover; background-position: center; 
-            position: relative; display: flex; flex-direction: column; justify-content: flex-end;
-            padding: 35px; border-radius: var(--card-radius); border: 1px solid rgba(255,255,255,0.08);
-            transition: transform 0.1s ease-out, opacity 0.5s, filter 0.4s;
-            cursor: pointer; scroll-snap-align: center; transform-style: preserve-3d;
-            backface-visibility: hidden;
-            -webkit-backface-visibility: hidden;
+            flex: 0 0 350px; /* DO NOT SHRINK */
+            height: 500px;
+            background-size: cover;
+            background-position: center;
+            border-radius: var(--card-radius);
+            position: relative;
+            cursor: pointer;
+            scroll-snap-align: center;
+            transform-style: preserve-3d;
+            transition: opacity 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.1);
         }
-        .card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 30%, rgba(0,0,0,0.95)); z-index: 1; border-radius: var(--card-radius); }
-        .card:hover { border-color: var(--accent); box-shadow: 0 0 30px rgba(230, 126, 34, 0.3); }
-        .card.exit-active { transform: scale(1.2) translateZ(500px) !important; opacity: 0 !important; filter: blur(15px); }
+        .card::after { 
+            content: ''; position: absolute; inset: 0; 
+            background: linear-gradient(transparent 40%, rgba(0,0,0,0.9)); 
+            border-radius: var(--card-radius); 
+        }
 
-        .card-content { z-index: 2; width: 100%; }
-        .card-title { font-weight: 900; font-size: 32px; color: white; margin: 0; text-transform: uppercase; }
-        .card-sub { font-size: 11px; color: var(--accent); letter-spacing: 3px; font-weight: 900; margin-bottom: 5px; }
-        
-        /* Edit UI */
-        .place-input { background: transparent; border: none; color: white; font-family: inherit; font-weight: 900; font-size: 26px; width: 100%; outline: none; text-transform: uppercase; }
-        .place-desc { background: transparent; border: none; color: rgba(255,255,255,0.7); font-family: inherit; font-size: 14px; width: 100%; height: 80px; resize: none; outline: none; margin-top: 10px; line-height: 1.5; }
-        .read-only-text { color: rgba(255,255,255,0.7); font-size: 14px; margin-top: 10px; white-space: pre-wrap; }
+        .card-content {
+            position: absolute; bottom: 0; left: 0; width: 100%;
+            padding: 30px; z-index: 2;
+        }
+        .card-title { font-weight: 900; font-size: 28px; margin: 0; text-transform: uppercase; }
+        .card-sub { font-size: 10px; color: var(--accent); letter-spacing: 2px; font-weight: 700; }
 
-        .fab { position: fixed; bottom: 40px; right: 40px; background: var(--accent); color: white; width: 65px; height: 65px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 35px; cursor: pointer; box-shadow: 0 15px 30px rgba(230, 126, 34, 0.3); border: none; z-index: 10; }
-        .btn-mini { background: rgba(255,255,255,0.1); border: none; color: white; padding: 6px 12px; border-radius: 4px; font-size: 10px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
+        /* Edit Styles */
+        .place-input { background: transparent; border: none; color: white; font-weight: 900; font-size: 24px; width: 100%; outline: none; }
+        .place-desc { background: transparent; border: none; color: #ccc; width: 100%; height: 60px; resize: none; outline: none; margin-top: 10px; font-family: inherit; }
 
-        /* --- MOBILE RESPONSIVENESS --- */
+        .fab { position: fixed; bottom: 40px; right: 40px; background: var(--accent); color: white; width: 60px; height: 60px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; border: none; z-index: 100; box-shadow: 0 10px 20px rgba(230, 126, 34, 0.4); }
+
+        /* --- MOBILE --- */
         @media (max-width: 768px) {
             .navbar { padding: 15px 25px; }
-            .header-section { padding: 40px 25px 10px 25px; }
-            .grid {
-                padding: 40px 15vw; 
-                gap: 30px;
-                height: 550px;
-            }
-            .card {
-                flex: 0 0 280px;
-                height: 420px;
-                padding: 20px;
-            }
-            .title-display { font-size: 45px; letter-spacing: -2px; }
-            .fab { width: 50px; height: 50px; bottom: 20px; right: 20px; font-size: 25px; }
+            .header-section { padding: 100px 25px 0 25px; }
+            .grid { padding: 0 20vw; gap: 30px; }
+            .card { flex: 0 0 280px; height: 420px; }
+            .title-display { font-size: 40px; letter-spacing: -1px; }
         }
     </style>
 </head>
@@ -122,16 +109,17 @@
     <div class="hero-bg"></div>
 
     <nav class="navbar">
-        <div class="logo" onclick="smoothGoBack()">COMPASS<span class="dot">●</span></div>
-        <div id="mode-indicator" class="mode-tag" style="display:none">ADMIN MODE</div>
+        <div class="logo" onclick="smoothGoBack()">COMPASS●</div>
+        <div id="mode-indicator" class="mode-tag" style="display:none">ADMIN</div>
     </nav>
 
     <header class="header-section">
-        <div id="breadcrumb" class="breadcrumb" onclick="smoothGoBack()">← WORLD VIEW</div>
+        <div id="breadcrumb" class="breadcrumb" onclick="smoothGoBack()">← BACK TO GLOBAL</div>
         <h1 id="view-title" class="title-display">WORLD ARCHIVE</h1>
     </header>
     
     <main id="main-grid" class="grid"></main>
+
     <button id="add-btn" class="fab" onclick="createNewItem()">+</button>
 
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -139,46 +127,40 @@
 
     <script>
         const mainGrid = document.getElementById('main-grid');
+        const viewTitle = document.getElementById('view-title');
+        const breadcrumb = document.getElementById('breadcrumb');
 
         // --- DYNAMO ENGINE ---
-        function updateDynamoEffect() {
+        function updateDynamo() {
             const cards = document.querySelectorAll('.card');
             const centerX = window.innerWidth / 2;
 
             cards.forEach(card => {
                 const rect = card.getBoundingClientRect();
-                const cardCenter = rect.left + rect.width / 2;
-                const distanceFromCenter = (cardCenter - centerX) / centerX;
-                
-                const rotateVal = distanceFromCenter * 50; 
-                const scaleVal = 1 - Math.min(Math.abs(distanceFromCenter) * 0.2, 0.5);
-                const opacityVal = 1 - Math.abs(distanceFromCenter) * 0.7;
+                const cardMid = rect.left + rect.width / 2;
+                const distance = (cardMid - centerX) / centerX;
 
-                card.style.transform = `
-                    rotateY(${rotateVal}deg) 
-                    scale(${scaleVal}) 
-                    translateZ(${Math.abs(distanceFromCenter) * -150}px)
-                `;
-                card.style.opacity = opacityVal;
+                const rotateY = distance * 45; 
+                const translateZ = Math.abs(distance) * -150;
+                const scale = 1 - (Math.abs(distance) * 0.1);
+
+                card.style.transform = `rotateY(${rotateY}deg) translateZ(${translateZ}px) scale(${scale})`;
+                card.style.opacity = 1 - Math.abs(distance) * 0.5;
             });
         }
 
-        // --- SCROLL LISTENERS ---
-        mainGrid.addEventListener('scroll', () => {
-            requestAnimationFrame(updateDynamoEffect);
-        });
-
-        mainGrid.addEventListener('wheel', (evt) => {
-            if (window.innerWidth > 768) { 
-                evt.preventDefault();
-                mainGrid.scrollLeft += evt.deltaY;
+        mainGrid.addEventListener('scroll', () => requestAnimationFrame(updateDynamo));
+        
+        mainGrid.addEventListener('wheel', (e) => {
+            if (window.innerWidth > 768) {
+                e.preventDefault();
+                mainGrid.scrollLeft += e.deltaY;
             }
         }, { passive: false });
 
-        // --- CONFIG & STATE ---
+        // --- FIREBASE & STATE ---
         const urlParams = new URLSearchParams(window.location.search);
         const isEditing = urlParams.get('edit') === 'true';
-
         if(isEditing) {
             document.getElementById('mode-indicator').style.display = 'block';
             document.getElementById('add-btn').style.display = 'flex';
@@ -192,51 +174,37 @@
             messagingSenderId: "1054821903994",
             appId: "1:1054821903994:web:7b898875d0bef2e6be15c3"
         };
-
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
         let allData = [];
         let currentMode = 'COUNTRIES';
         let activeCountry = '';
-        let lastScrollPos = 0;
 
-        // --- NAVIGATION ---
-        function smoothGoBack() {
-            if (currentMode === 'COUNTRIES') return;
-            mainGrid.style.opacity = '0';
-            setTimeout(() => {
-                renderCountries();
-                mainGrid.scrollLeft = lastScrollPos;
-                mainGrid.style.opacity = '1';
-                setTimeout(updateDynamoEffect, 50);
-            }, 400);
+        // --- CORE FUNCTIONS ---
+        async function loadData() {
+            const doc = await db.collection("journals").doc("final_archive").get();
+            if (doc.exists) allData = doc.data().data || [];
+            renderCountries();
         }
 
-        // --- RENDERING ---
         function renderCountries() {
             currentMode = 'COUNTRIES';
             mainGrid.innerHTML = '';
-            document.getElementById('view-title').innerText = "WORLD ARCHIVE";
-            document.getElementById('breadcrumb').style.display = 'none';
+            viewTitle.innerText = "WORLD ARCHIVE";
+            breadcrumb.style.display = 'none';
 
-            const countries = {};
+            const summary = {};
             allData.forEach(item => {
-                if (!countries[item.country]) {
-                    countries[item.country] = { name: item.country, img: item.img, count: 0 };
-                }
-                countries[item.country].count++;
+                if (!summary[item.country]) summary[item.country] = { name: item.country, img: item.img, count: 0 };
+                summary[item.country].count++;
             });
 
-            Object.values(countries).forEach((c) => {
+            Object.values(summary).forEach(c => {
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.style.backgroundImage = `url('${c.img}')`;
-                card.onclick = () => {
-                    lastScrollPos = mainGrid.scrollLeft;
-                    card.classList.add('exit-active');
-                    setTimeout(() => renderPlaces(c.name), 400);
-                };
+                card.onclick = () => renderPlaces(c.name);
                 card.innerHTML = `
                     <div class="card-content">
                         <div class="card-sub">${c.count} MEMORIES</div>
@@ -244,89 +212,56 @@
                     </div>`;
                 mainGrid.appendChild(card);
             });
-            updateDynamoEffect();
+            setTimeout(updateDynamo, 100);
         }
 
         function renderPlaces(country) {
             currentMode = 'PLACES';
             activeCountry = country;
             mainGrid.innerHTML = '';
+            viewTitle.innerText = country;
+            breadcrumb.style.display = 'block';
             mainGrid.scrollLeft = 0;
-            document.getElementById('view-title').innerText = country;
-            document.getElementById('breadcrumb').style.display = 'block';
 
-            const filtered = allData.filter(d => d.country === country);
-            filtered.forEach((p, index) => {
+            allData.filter(d => d.country === country).forEach(p => {
                 const idx = allData.indexOf(p);
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.style.backgroundImage = `url('${p.img}')`;
                 card.innerHTML = `
                     <div class="card-content">
-                        ${isEditing ? `<input type="text" class="place-input" value="${p.name}" oninput="updatePlace(${idx}, 'name', this.value)">` : `<h2 class="card-title">${p.name}</h2>`}
-                        ${isEditing ? `<textarea class="place-desc" oninput="updatePlace(${idx}, 'notes', this.value)">${p.notes}</textarea>` : `<p class="read-only-text">${p.notes}</p>`}
-                        <div style="display:${isEditing ? 'flex' : 'none'}; gap:10px; margin-top:15px;">
-                            <input type="file" style="display:none" onchange="uploadPhoto(this, ${idx})">
-                            <button onclick="this.previousElementSibling.click()" class="btn-mini">Photo</button>
-                            <button onclick="deleteItem(${idx})" class="btn-mini" style="color:#ff4757">Delete</button>
-                        </div>
+                        ${isEditing ? `<input class="place-input" value="${p.name}" oninput="allData[${idx}].name=this.value; saveData()">` : `<h2 class="card-title">${p.name}</h2>`}
+                        ${isEditing ? `<textarea class="place-desc" oninput="allData[${idx}].notes=this.value; saveData()">${p.notes}</textarea>` : `<p style="font-size:13px; color:#ddd;">${p.notes}</p>`}
+                        ${isEditing ? `<button onclick="deleteItem(${idx})" style="margin-top:10px; background:none; border:1px solid red; color:red; cursor:pointer; font-size:10px; padding:4px;">DELETE</button>` : ''}
                     </div>`;
                 mainGrid.appendChild(card);
             });
-            updateDynamoEffect();
+            setTimeout(updateDynamo, 100);
         }
 
-        // --- DATA LOGIC ---
+        function smoothGoBack() {
+            if (currentMode === 'COUNTRIES') return;
+            renderCountries();
+        }
+
         function createNewItem() {
-            let country = activeCountry;
-            if (currentMode === 'COUNTRIES') {
-                const input = prompt("Enter Country Name:");
-                if (!input) return;
-                country = input.toUpperCase();
-            }
-            allData.push({ country, name: "New Discovery", notes: "", img: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1470" });
+            let country = activeCountry || prompt("Country Name:").toUpperCase();
+            if(!country) return;
+            allData.push({ country, name: "New Place", notes: "", img: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1470" });
             saveData();
             renderPlaces(country);
         }
 
-        function updatePlace(index, field, value) {
-            allData[index][field] = value;
-            saveData();
-        }
-
-        function uploadPhoto(input, index) {
-            const file = input.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    allData[index].img = e.target.result;
-                    saveData();
-                    renderPlaces(activeCountry);
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function deleteItem(index) {
-            if(confirm("Permanently erase this memory?")) {
-                const country = allData[index].country;
-                allData.splice(index, 1);
+        function deleteItem(idx) {
+            if(confirm("Erase memory?")) {
+                const c = allData[idx].country;
+                allData.splice(idx, 1);
                 saveData();
-                allData.some(d => d.country === country) ? renderPlaces(country) : renderCountries();
+                allData.some(d => d.country === c) ? renderPlaces(c) : renderCountries();
             }
         }
 
-        async function saveData() { 
-            if(isEditing) await db.collection("journals").doc("final_archive").set({ data: allData }); 
-        }
-
-        async function loadData() {
-            const doc = await db.collection("journals").doc("final_archive").get();
-            if (doc.exists) {
-                allData = doc.data().data || [];
-            }
-            renderCountries();
-        }
+        async function saveData() { if(isEditing) await db.collection("journals").doc("final_archive").set({ data: allData }); }
 
         window.onload = loadData;
     </script>

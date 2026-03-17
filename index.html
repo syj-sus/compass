@@ -72,19 +72,26 @@
         const track = document.getElementById('track');
         let allData = [], currentMode = 'COUNTRIES', activeCountry = '', lastScrollPos = 0;
 
-        // ADMIN LOGIC
-        const urlParams = new URLSearchParams(window.location.search);
-        let isEditing = urlParams.get('edit') === 'true';
-        if(isEditing) {
-            const pass = prompt("Enter Admin Password:");
-            if(pass === "/compass0105") {
-                document.getElementById('mode-indicator').style.display = 'block';
-                document.getElementById('add-btn').style.display = 'flex';
-            } else {
-                alert("Incorrect. View-only mode.");
-                isEditing = false;
-            }
+         // IMPROVED ADMIN LOGIC
+const urlParams = new URLSearchParams(window.location.search);
+let isEditing = false;
+
+function checkAdminStatus() {
+    if (urlParams.get('edit') === 'true') {
+        const pass = prompt("Enter Admin Password:");
+        if (pass === "/compass0105") {
+            isEditing = true;
+            document.getElementById('mode-indicator').style.display = 'block';
+            document.getElementById('add-btn').style.display = 'flex';
+        } else {
+            alert("Incorrect. View-only mode.");
+            isEditing = false;
         }
+    }
+}
+
+// Call this immediately
+checkAdminStatus();
 
         const firebaseConfig = {
             apiKey: "AIzaSyDhMAFYZ1IxT6Eni-O5iaeo7bnWF5BCudU",

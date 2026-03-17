@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>COMPASS● | Global Archive</title>
+    <title>COMPASS ● | Global Archive</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         :root { --bg: #0e1012; --accent: #e67e22; --text: #ffffff; --card-radius: 24px; }
@@ -182,33 +182,43 @@ checkAdminStatus();
             setTimeout(() => { mainGrid.scrollLeft = lastScrollPos; updateDynamo(); }, 60);
         }
 
-        function renderPlaces(country) {
-            currentMode = 'PLACES'; activeCountry = country;
-            mainGrid.innerHTML = '';
-            document.getElementById('view-title').innerText = country;
-            document.getElementById('breadcrumb').style.display = 'block';
-            mainGrid.scrollLeft = 0;
-            allData.forEach((p, idx) => {
-                if(p.country === country) {
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    card.style.backgroundImage = `url('${p.img}')`;
-                    if(isEditing) {
-                        card.innerHTML = `
-                            <div class="card-content">
-                                <input class="admin-input" value="${p.img}" placeholder="Image URL" onchange="updateItem(${idx}, 'img', this.value)">
-                                <input class="admin-input" style="font-weight:900" value="${p.name}" placeholder="Place Name" onchange="updateItem(${idx}, 'name', this.value)">
-                                <textarea class="admin-input" style="height:60px" placeholder="Notes" onchange="updateItem(${idx}, 'notes', this.value)">${p.notes}</textarea>
-                                <button onclick="deleteItem(${idx})" style="background:red; color:white; border:none; padding:4px 8px; font-size:9px; border-radius:4px; cursor:pointer;">DELETE</button>
-                            </div>`;
-                    } else {
-                        card.innerHTML = `<div class="card-content"><h2 class="place-title">${p.name}</h2><p class="place-notes">${p.notes}</p></div>`;
-                    }
-                    mainGrid.appendChild(card);
-                }
-            });
-            setTimeout(updateDynamo, 60);
+function renderPlaces(country) {
+    currentMode = 'PLACES'; 
+    activeCountry = country;
+    mainGrid.innerHTML = '';
+    document.getElementById('view-title').innerText = country;
+    document.getElementById('breadcrumb').style.display = 'block';
+    
+    // Reset scroll position for the new set of cards
+    mainGrid.scrollLeft = 0;
+
+    allData.forEach((p, idx) => {
+        if(p.country === country) {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.style.backgroundImage = `url('${p.img}')`;
+            
+            if(isEditing) {
+                card.innerHTML = `
+                    <div class="card-content" style="background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);">
+                        <input class="admin-input" value="${p.img}" placeholder="Image URL" onchange="updateItem(${idx}, 'img', this.value)">
+                        <input class="admin-input" style="font-weight:900; color:var(--accent);" value="${p.name}" placeholder="Place Name" onchange="updateItem(${idx}, 'name', this.value)">
+                        <textarea class="admin-input" style="height:60px" placeholder="Notes" onchange="updateItem(${idx}, 'notes', this.value)">${p.notes}</textarea>
+                        <button onclick="deleteItem(${idx})" style="width:100%; background:#c0392b; color:white; border:none; padding:8px; font-weight:900; border-radius:4px; cursor:pointer; margin-top:5px;">DELETE ENTRY</button>
+                    </div>`;
+            } else {
+                card.innerHTML = `<div class="card-content"><h2 class="place-title">${p.name}</h2><p class="place-notes">${p.notes}</p></div>`;
+            }
+            mainGrid.appendChild(card);
         }
+    });
+
+    // CRITICAL: Re-initialize the needle and 3D effects for the new cards
+    setTimeout(() => {
+        updateDynamo();
+    }, 100);
+}
+
 
         async function updateItem(idx, key, val) {
             allData[idx][key] = val;
@@ -268,26 +278,35 @@ function updateDynamo() {
     needle.style.left = `${scrollPercent}%`;
 }
 
-// DRAG TO SCROLL (For PC Mouse users who want to grab)
 let isDown = false;
 let startX;
 let scrollLeft;
 
 mainGrid.addEventListener('mousedown', (e) => {
     isDown = true;
+    mainGrid.style.cursor = 'grabbing';
     startX = e.pageX - mainGrid.offsetLeft;
     scrollLeft = mainGrid.scrollLeft;
 });
-mainGrid.addEventListener('mouseleave', () => isDown = false);
-mainGrid.addEventListener('mouseup', () => isDown = false);
+
+mainGrid.addEventListener('mouseleave', () => {
+    isDown = false;
+    mainGrid.style.cursor = 'grab';
+});
+
+mainGrid.addEventListener('mouseup', () => {
+    isDown = false;
+    mainGrid.style.cursor = 'grab';
+});
+
 mainGrid.addEventListener('mousemove', (e) => {
     if(!isDown) return;
     e.preventDefault();
     const x = e.pageX - mainGrid.offsetLeft;
-    const walk = (x - startX) * 2; // Scroll speed
+    const walk = (x - startX) * 2; 
     mainGrid.scrollLeft = scrollLeft - walk;
+    updateDynamo(); // Keeps the needle moving while dragging
 });
-
 
         mainGrid.addEventListener('scroll', () => requestAnimationFrame(updateDynamo));
         window.onload = loadData;

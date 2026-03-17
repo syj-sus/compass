@@ -10,97 +10,117 @@
             --bg: #0e1012;
             --accent: #e67e22;
             --text: #ffffff;
-            --card-radius: 20px;
+            --card-radius: 24px;
         }
 
-        * { box-sizing: border-box; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { 
             margin: 0; 
             background: var(--bg); 
             color: var(--text); 
             font-family: 'Montserrat', sans-serif; 
-            overflow: hidden; /* Prevent vertical body scroll */
+            overflow: hidden; 
+            height: 100vh;
         }
 
         .hero-bg {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.7)), 
+            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.75)), 
                         url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1470') center/cover;
             z-index: -1;
-            pointer-events: none;
         }
 
-        /* --- NAVIGATION --- */
+        .logo { font-weight: 900; letter-spacing: 6px; font-size: 24px; color: var(--accent); cursor: pointer; display: flex; align-items: center; }
+        .dot { 
+            display: inline-block; 
+            margin-left: 10px;
+            animation: swing 2.5s ease-in-out infinite;
+        }
+        @keyframes swing {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(15px); filter: drop-shadow(-5px 0 10px var(--accent)); }
+        }
+
         .navbar {
             position: fixed; top: 0; width: 100%; z-index: 100;
             display: flex; align-items: center; justify-content: space-between; 
-            padding: 20px 60px; background: rgba(14, 16, 18, 0.8);
-            backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 30px 60px; background: linear-gradient(to bottom, rgba(14,16,18,1), transparent);
         }
-        .logo { font-weight: 900; letter-spacing: 6px; font-size: 24px; color: var(--accent); cursor: pointer; }
-        .mode-tag { font-size: 10px; border: 1px solid var(--accent); padding: 4px 8px; border-radius: 4px; color: var(--accent); }
 
-        .header-section { padding: 120px 60px 0 60px; position: relative; z-index: 10; }
-        .breadcrumb { font-size: 11px; font-weight: 900; color: var(--accent); cursor: pointer; margin-bottom: 10px; display: none; }
-        .title-display { font-size: clamp(40px, 8vw, 90px); font-weight: 900; letter-spacing: -4px; margin: 0; text-transform: uppercase; }
+        .header-section { padding: 140px 60px 0 60px; z-index: 10; position: relative; }
+        .breadcrumb { font-size: 10px; font-weight: 900; color: var(--accent); cursor: pointer; margin-bottom: 8px; letter-spacing: 2px; }
+        .title-display { font-size: clamp(30px, 6vw, 70px); font-weight: 900; letter-spacing: -2px; margin: 0; text-transform: uppercase; }
 
-        /* --- THE DYNAMO ENGINE (CSS) --- */
         .grid {
             display: flex;
             flex-wrap: nowrap;
             overflow-x: auto;
-            overflow-y: hidden;
             width: 100vw;
-            height: 70vh;
-            padding: 0 45vw; /* Initial centering */
+            height: 60vh;
+            padding: 0 42vw;
             align-items: center;
             gap: 50px;
             scroll-snap-type: x proximity;
-            perspective: 1500px; /* Essential for 3D depth */
+            perspective: 2000px;
+            scrollbar-width: none;
             -webkit-overflow-scrolling: touch;
-            scrollbar-width: none; /* Hide scrollbar Firefox */
+            opacity: 1;
+            transition: opacity 0.4s ease;
         }
         .grid::-webkit-scrollbar { display: none; }
 
         .card {
-            flex: 0 0 350px; /* DO NOT SHRINK */
-            height: 500px;
+            flex: 0 0 350px;
+            height: 480px;
             background-size: cover;
             background-position: center;
             border-radius: var(--card-radius);
             position: relative;
-            cursor: pointer;
-            scroll-snap-align: center;
             transform-style: preserve-3d;
-            transition: opacity 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: opacity 0.4s ease;
         }
-        .card::after { 
-            content: ''; position: absolute; inset: 0; 
-            background: linear-gradient(transparent 40%, rgba(0,0,0,0.9)); 
-            border-radius: var(--card-radius); 
+        .card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 50%, rgba(0,0,0,0.9)); border-radius: var(--card-radius); }
+        .card-content { position: absolute; bottom: 0; padding: 35px; z-index: 2; width: 100%; pointer-events: none; }
+
+        .compass-container {
+            position: fixed;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 200;
         }
 
-        .card-content {
-            position: absolute; bottom: 0; left: 0; width: 100%;
-            padding: 30px; z-index: 2;
+        .scroll-track {
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            position: relative;
+            cursor: pointer;
         }
-        .card-title { font-weight: 900; font-size: 28px; margin: 0; text-transform: uppercase; }
-        .card-sub { font-size: 10px; color: var(--accent); letter-spacing: 2px; font-weight: 700; }
 
-        /* Edit Styles */
-        .place-input { background: transparent; border: none; color: white; font-weight: 900; font-size: 24px; width: 100%; outline: none; }
-        .place-desc { background: transparent; border: none; color: #ccc; width: 100%; height: 60px; resize: none; outline: none; margin-top: 10px; font-family: inherit; }
+        .needle-handle {
+            position: absolute;
+            top: -18px;
+            left: 0;
+            width: 2px;
+            height: 40px;
+            background: var(--accent);
+            box-shadow: 0 0 15px var(--accent);
+            pointer-events: none;
+        }
 
-        .fab { position: fixed; bottom: 40px; right: 40px; background: var(--accent); color: white; width: 60px; height: 60px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; border: none; z-index: 100; box-shadow: 0 10px 20px rgba(230, 126, 34, 0.4); }
-
-        /* --- MOBILE --- */
         @media (max-width: 768px) {
-            .navbar { padding: 15px 25px; }
-            .header-section { padding: 100px 25px 0 25px; }
-            .grid { padding: 0 20vw; gap: 30px; }
-            .card { flex: 0 0 280px; height: 420px; }
-            .title-display { font-size: 40px; letter-spacing: -1px; }
+            .navbar { padding: 20px; }
+            .grid { padding: 0 15vw; }
+            .card { flex: 0 0 280px; height: 400px; }
+            .compass-container { width: 200px; bottom: 30px; }
         }
     </style>
 </head>
@@ -109,62 +129,34 @@
     <div class="hero-bg"></div>
 
     <nav class="navbar">
-        <div class="logo" onclick="smoothGoBack()">COMPASS●</div>
-        <div id="mode-indicator" class="mode-tag" style="display:none">ADMIN</div>
+        <div class="logo" onclick="smoothGoBack()">COMPASS<span class="dot">●</span></div>
     </nav>
 
     <header class="header-section">
-        <div id="breadcrumb" class="breadcrumb" onclick="smoothGoBack()">← BACK TO GLOBAL</div>
+        <div id="breadcrumb" class="breadcrumb" onclick="smoothGoBack()">← RETURN TO WORLD</div>
         <h1 id="view-title" class="title-display">WORLD ARCHIVE</h1>
     </header>
     
     <main id="main-grid" class="grid"></main>
 
-    <button id="add-btn" class="fab" onclick="createNewItem()">+</button>
+    <div class="compass-container">
+        <div class="scroll-track" id="track">
+            <div id="needle" class="needle-handle"></div>
+        </div>
+        <div style="font-size: 8px; letter-spacing: 4px; margin-top: 15px; opacity: 0.4;">NAVIGATE HORIZON</div>
+    </div>
 
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <script>
         const mainGrid = document.getElementById('main-grid');
-        const viewTitle = document.getElementById('view-title');
-        const breadcrumb = document.getElementById('breadcrumb');
+        const needle = document.getElementById('needle');
+        const track = document.getElementById('track');
 
-        // --- DYNAMO ENGINE ---
-        function updateDynamo() {
-            const cards = document.querySelectorAll('.card');
-            const centerX = window.innerWidth / 2;
-
-            cards.forEach(card => {
-                const rect = card.getBoundingClientRect();
-                const cardMid = rect.left + rect.width / 2;
-                const distance = (cardMid - centerX) / centerX;
-
-                const rotateY = distance * 45; 
-                const translateZ = Math.abs(distance) * -150;
-                const scale = 1 - (Math.abs(distance) * 0.1);
-
-                card.style.transform = `rotateY(${rotateY}deg) translateZ(${translateZ}px) scale(${scale})`;
-                card.style.opacity = 1 - Math.abs(distance) * 0.5;
-            });
-        }
-
-        mainGrid.addEventListener('scroll', () => requestAnimationFrame(updateDynamo));
-        
-        mainGrid.addEventListener('wheel', (e) => {
-            if (window.innerWidth > 768) {
-                e.preventDefault();
-                mainGrid.scrollLeft += e.deltaY;
-            }
-        }, { passive: false });
-
-        // --- FIREBASE & STATE ---
-        const urlParams = new URLSearchParams(window.location.search);
-        const isEditing = urlParams.get('edit') === 'true';
-        if(isEditing) {
-            document.getElementById('mode-indicator').style.display = 'block';
-            document.getElementById('add-btn').style.display = 'flex';
-        }
+        let allData = [];
+        let currentMode = 'COUNTRIES';
+        let lastScrollPos = 0;
 
         const firebaseConfig = {
             apiKey: "AIzaSyDhMAFYZ1IxT6Eni-O5iaeo7bnWF5BCudU",
@@ -174,25 +166,27 @@
             messagingSenderId: "1054821903994",
             appId: "1:1054821903994:web:7b898875d0bef2e6be15c3"
         };
+
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        let allData = [];
-        let currentMode = 'COUNTRIES';
-        let activeCountry = '';
-
-        // --- CORE FUNCTIONS ---
         async function loadData() {
-            const doc = await db.collection("journals").doc("final_archive").get();
-            if (doc.exists) allData = doc.data().data || [];
-            renderCountries();
+            try {
+                const doc = await db.collection("journals").doc("final_archive").get();
+                if (doc.exists) {
+                    allData = doc.data().data || [];
+                }
+                renderCountries();
+            } catch (err) {
+                console.error("Firebase load failed:", err);
+            }
         }
 
         function renderCountries() {
             currentMode = 'COUNTRIES';
             mainGrid.innerHTML = '';
-            viewTitle.innerText = "WORLD ARCHIVE";
-            breadcrumb.style.display = 'none';
+            document.getElementById('view-title').innerText = "WORLD ARCHIVE";
+            document.getElementById('breadcrumb').style.display = 'none';
 
             const summary = {};
             allData.forEach(item => {
@@ -204,64 +198,89 @@
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.style.backgroundImage = `url('${c.img}')`;
-                card.onclick = () => renderPlaces(c.name);
+                card.onclick = () => {
+                    lastScrollPos = mainGrid.scrollLeft;
+                    renderPlaces(c.name);
+                };
                 card.innerHTML = `
                     <div class="card-content">
-                        <div class="card-sub">${c.count} MEMORIES</div>
-                        <h2 class="card-title">${c.name}</h2>
+                        <div style="font-size:10px; color:var(--accent); font-weight:700; letter-spacing:2px;">${c.count} MEMORIES</div>
+                        <h2 style="text-transform:uppercase; margin:0; font-size:32px;">${c.name}</h2>
                     </div>`;
                 mainGrid.appendChild(card);
             });
-            setTimeout(updateDynamo, 100);
+
+            setTimeout(() => {
+                mainGrid.scrollLeft = lastScrollPos;
+                updateDynamo();
+            }, 60);
         }
 
         function renderPlaces(country) {
             currentMode = 'PLACES';
-            activeCountry = country;
             mainGrid.innerHTML = '';
-            viewTitle.innerText = country;
-            breadcrumb.style.display = 'block';
+            document.getElementById('view-title').innerText = country;
+            document.getElementById('breadcrumb').style.display = 'block';
             mainGrid.scrollLeft = 0;
 
             allData.filter(d => d.country === country).forEach(p => {
-                const idx = allData.indexOf(p);
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.style.backgroundImage = `url('${p.img}')`;
                 card.innerHTML = `
                     <div class="card-content">
-                        ${isEditing ? `<input class="place-input" value="${p.name}" oninput="allData[${idx}].name=this.value; saveData()">` : `<h2 class="card-title">${p.name}</h2>`}
-                        ${isEditing ? `<textarea class="place-desc" oninput="allData[${idx}].notes=this.value; saveData()">${p.notes}</textarea>` : `<p style="font-size:13px; color:#ddd;">${p.notes}</p>`}
-                        ${isEditing ? `<button onclick="deleteItem(${idx})" style="margin-top:10px; background:none; border:1px solid red; color:red; cursor:pointer; font-size:10px; padding:4px;">DELETE</button>` : ''}
+                        <h2 style="text-transform:uppercase; margin:0;">${p.name}</h2>
+                        <p style="font-size:13px; opacity:0.7; line-height:1.6;">${p.notes}</p>
                     </div>`;
                 mainGrid.appendChild(card);
             });
-            setTimeout(updateDynamo, 100);
+            setTimeout(updateDynamo, 60);
         }
 
         function smoothGoBack() {
-            if (currentMode === 'COUNTRIES') return;
-            renderCountries();
-        }
-
-        function createNewItem() {
-            let country = activeCountry || prompt("Country Name:").toUpperCase();
-            if(!country) return;
-            allData.push({ country, name: "New Place", notes: "", img: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1470" });
-            saveData();
-            renderPlaces(country);
-        }
-
-        function deleteItem(idx) {
-            if(confirm("Erase memory?")) {
-                const c = allData[idx].country;
-                allData.splice(idx, 1);
-                saveData();
-                allData.some(d => d.country === c) ? renderPlaces(c) : renderCountries();
+            if (currentMode === 'PLACES') {
+                mainGrid.style.opacity = '0';
+                setTimeout(() => {
+                    renderCountries();
+                    mainGrid.style.opacity = '1';
+                }, 150);
             }
         }
 
-        async function saveData() { if(isEditing) await db.collection("journals").doc("final_archive").set({ data: allData }); }
+        function updateDynamo() {
+            const cards = document.querySelectorAll('.card');
+            const centerX = window.innerWidth / 2;
+
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const cardMid = rect.left + rect.width / 2;
+                const distance = (cardMid - centerX) / centerX;
+
+                card.style.transform = `rotateY(${distance * 45}deg) translateZ(${Math.abs(distance) * -150}px) scale(${1 - Math.abs(distance) * 0.15})`;
+                card.style.opacity = 1 - Math.abs(distance) * 0.6;
+            });
+
+            const maxScroll = mainGrid.scrollWidth - mainGrid.clientWidth;
+            const scrollPercent = maxScroll > 0 ? (mainGrid.scrollLeft / maxScroll) * 100 : 0;
+            needle.style.left = `${Math.max(0, Math.min(scrollPercent, 100))}%`;
+        }
+
+        track.addEventListener('click', (e) => {
+            const rect = track.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const percent = clickX / rect.width;
+            const maxScroll = mainGrid.scrollWidth - mainGrid.clientWidth;
+            mainGrid.scrollTo({ left: maxScroll * percent, behavior: 'smooth' });
+        });
+
+        mainGrid.addEventListener('scroll', () => requestAnimationFrame(updateDynamo));
+        
+        mainGrid.addEventListener('wheel', (e) => {
+            if (window.innerWidth > 768) {
+                e.preventDefault();
+                mainGrid.scrollLeft += e.deltaY;
+            }
+        }, { passive: false });
 
         window.onload = loadData;
     </script>

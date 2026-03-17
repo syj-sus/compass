@@ -24,43 +24,88 @@
             z-index: -1;
         }
 
+        /* --- LOGO --- */
+        .logo { display: flex; align-items: center; font-weight: 900; letter-spacing: 6px; font-size: 28px; color: var(--accent); cursor: pointer; text-transform: uppercase; }
+        .dot { display: inline-block; animation: pushDot 3s cubic-bezier(0.45, 0, 0.55, 1) infinite; }
+        @keyframes pushDot {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(20px) rotate(15deg); margin-left: 10px; filter: drop-shadow(-5px 0 5px rgba(230, 126, 34, 0.4)); }
+        }
+
+        /* --- NAVIGATION --- */
         .navbar {
             position: sticky; top: 0; width: 100%; z-index: 100;
             display: flex; align-items: center; justify-content: space-between; 
             padding: 20px 60px; background: rgba(14, 16, 18, 0.95);
             backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .logo { font-weight: 900; letter-spacing: 6px; font-size: 28px; color: var(--accent); cursor: pointer; text-transform: uppercase; }
         .mode-tag { font-size: 9px; font-weight: 900; letter-spacing: 2px; color: var(--accent); border: 1px solid var(--accent); padding: 4px 8px; border-radius: 4px; }
 
         .header-section { padding: 80px 60px 20px 60px; }
         .breadcrumb { font-size: 11px; font-weight: 900; letter-spacing: 2px; color: var(--accent); text-transform: uppercase; cursor: pointer; margin-bottom: 15px; display: none; }
         .title-display { font-size: clamp(40px, 8vw, 100px); font-weight: 900; text-transform: uppercase; letter-spacing: -4px; margin: 0; line-height: 0.9; }
 
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 35px; padding: 40px 60px; }
-        
-        .card { 
-            height: 500px; background-size: cover; background-position: center; 
+        /* --- DYNAMO GRID --- */
+  /* --- RESPONSIVE DYNAMO GRID --- */
+.grid {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    /* Desktop gets wide padding to center cards, Mobile gets less */
+    padding: 80px 45vw; 
+    gap: 60px;
+    scroll-snap-type: x mandatory;
+    perspective: 2000px;
+    scroll-behavior: smooth;
+    height: 700px;
+    align-items: center;
+    /* Smooth out momentum scrolling on iOS */
+    -webkit-overflow-scrolling: touch; 
+}
+        .grid::-webkit-scrollbar { display: none; }
+
+        /* --- CARDS --- */
+        .card {
+            flex: 0 0 400px; height: 550px; background-size: cover; background-position: center; 
             position: relative; display: flex; flex-direction: column; justify-content: flex-end;
             padding: 35px; border-radius: var(--card-radius); border: 1px solid rgba(255,255,255,0.08);
-            transition: 0.5s cubic-bezier(0.165, 0.84, 0.44, 1); overflow: hidden; cursor: pointer;
-        }
-        .card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 30px 60px rgba(0,0,0,0.5); }
-        .card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 30%, rgba(0,0,0,0.95)); z-index: 1; }
-        
+            transition: transform 0.1s ease-out, opacity 0.5s, filter 0.4s;
+            cursor: pointer; scroll-snap-align: center; transform-style: preserve-3d;
+        backface-visibility: hidden;
+    -webkit-backface-visibility: hidden; /* For Safari */
+}
+        .card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 30%, rgba(0,0,0,0.95)); z-index: 1; border-radius: var(--card-radius); }
+        .card:hover { border-color: var(--accent); box-shadow: 0 0 30px rgba(230, 126, 34, 0.3); }
+        .card.exit-active { transform: scale(1.2) translateZ(500px) !important; opacity: 0 !important; filter: blur(15px); }
+
         .card-content { z-index: 2; width: 100%; }
         .card-title { font-weight: 900; font-size: 32px; color: white; margin: 0; text-transform: uppercase; }
         .card-sub { font-size: 11px; color: var(--accent); letter-spacing: 3px; font-weight: 900; margin-bottom: 5px; }
         
+        /* Edit UI */
         .place-input { background: transparent; border: none; color: white; font-family: inherit; font-weight: 900; font-size: 26px; width: 100%; outline: none; text-transform: uppercase; }
         .place-desc { background: transparent; border: none; color: rgba(255,255,255,0.7); font-family: inherit; font-size: 14px; width: 100%; height: 80px; resize: none; outline: none; margin-top: 10px; line-height: 1.5; }
-        .read-only-text { color: rgba(255,255,255,0.7); font-size: 14px; margin-top: 10px; white-space: pre-wrap; pointer-events: none; }
+        .read-only-text { color: rgba(255,255,255,0.7); font-size: 14px; margin-top: 10px; white-space: pre-wrap; }
 
-        .fab { position: fixed; bottom: 40px; right: 40px; background: var(--accent); color: white; width: 65px; height: 65px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 35px; cursor: pointer; box-shadow: 0 15px 30px rgba(230, 126, 34, 0.3); border: none; z-index: 10; transition: 0.3s; }
-        .fab:hover { transform: scale(1.1); }
+        .fab { position: fixed; bottom: 40px; right: 40px; background: var(--accent); color: white; width: 65px; height: 65px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 35px; cursor: pointer; box-shadow: 0 15px 30px rgba(230, 126, 34, 0.3); border: none; z-index: 10; }
         .btn-mini { background: rgba(255,255,255,0.1); border: none; color: white; padding: 6px 12px; border-radius: 4px; font-size: 10px; font-weight: 700; cursor: pointer; text-transform: uppercase; }
 
-        @media (max-width: 768px) { .navbar, .header-section, .grid { padding: 25px; } .grid { grid-template-columns: 1fr; } .fab { bottom: 20px; right: 20px; } }
+@media (max-width: 768px) {
+    .grid {
+        padding: 60px 15vw; /* Brings cards into view on small screens */
+        gap: 30px;
+        height: 600px;
+    }
+    .card {
+        flex: 0 0 280px; /* Makes cards narrower for mobile */
+        height: 420px;
+    }
+    .title-display {
+        font-size: 50px;
+        letter-spacing: -2px;
+    }
+}
     </style>
 </head>
 <body>
@@ -68,171 +113,215 @@
     <div class="hero-bg"></div>
 
     <nav class="navbar">
-        <div class="logo" onclick="renderCountries()">COMPASS●</div>
+        <div class="logo" onclick="smoothGoBack()">COMPASS<span class="dot">●</span></div>
         <div id="mode-indicator" class="mode-tag" style="display:none">ADMIN MODE</div>
     </nav>
 
     <header class="header-section">
-        <div id="breadcrumb" class="breadcrumb" onclick="renderCountries()">← WORLD VIEW</div>
+        <div id="breadcrumb" class="breadcrumb" onclick="smoothGoBack()">← WORLD VIEW</div>
         <h1 id="view-title" class="title-display">WORLD ARCHIVE</h1>
     </header>
     
     <main id="main-grid" class="grid"></main>
-    
     <button id="add-btn" class="fab" onclick="createNewItem()">+</button>
 
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
     <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        let isEditing = false;
+const mainGrid = document.getElementById('main-grid');
 
-        if(urlParams.get('edit') === 'true') {
-            const password = prompt("Enter password to edit:");
-            if(password === "/compass0105") {
-                isEditing = true;
-                document.getElementById('mode-indicator').style.display = 'block';
-                document.getElementById('add-btn').style.display = 'flex';
-            } else {
-                alert("Incorrect password!");
-                window.location.href = window.location.pathname;
-            }
+// --- DYNAMO ENGINE (Single Optimized Instance) ---
+function updateDynamoEffect() {
+    const cards = document.querySelectorAll('.card');
+    const centerX = window.innerWidth / 2;
+
+    cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const cardCenter = rect.left + rect.width / 2;
+        const distanceFromCenter = (cardCenter - centerX) / centerX;
+        
+        const rotateVal = distanceFromCenter * 50; 
+        const scaleVal = 1 - Math.min(Math.abs(distanceFromCenter) * 0.2, 0.5);
+        const opacityVal = 1 - Math.abs(distanceFromCenter) * 0.7;
+
+        card.style.transform = `
+            rotateY(${rotateVal}deg) 
+            scale(${scaleVal}) 
+            translateZ(${Math.abs(distanceFromCenter) * -150}px)
+        `;
+        card.style.opacity = opacityVal;
+    });
+}
+
+// --- EVENT LISTENERS ---
+// This handles the 3D updates for both Mouse Scroll and Finger Swipe
+mainGrid.addEventListener('scroll', () => {
+    requestAnimationFrame(updateDynamoEffect);
+});
+
+// Horizontal scroll for Desktop Mouse
+mainGrid.addEventListener('wheel', (evt) => {
+    if (window.innerWidth > 768) { 
+        evt.preventDefault();
+        mainGrid.scrollLeft += evt.deltaY;
+    }
+}, { passive: false });
+
+// --- CONFIG & STATE ---
+const urlParams = new URLSearchParams(window.location.search);
+const isEditing = urlParams.get('edit') === 'true';
+
+if(isEditing) {
+    document.getElementById('mode-indicator').style.display = 'block';
+    document.getElementById('add-btn').style.display = 'flex';
+}
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDhMAFYZ1IxT6Eni-O5iaeo7bnWF5BCudU",
+    authDomain: "travelcost-77179.firebaseapp.com",
+    projectId: "travelcost-77179",
+    storageBucket: "travelcost-77179.firebasestorage.app",
+    messagingSenderId: "1054821903994",
+    appId: "1:1054821903994:web:7b898875d0bef2e6be15c3"
+};
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+let allData = [];
+let currentMode = 'COUNTRIES';
+let activeCountry = '';
+let lastScrollPos = 0;
+
+// --- NAVIGATION & RENDERING (Same as your logic) ---
+function smoothGoBack() {
+    if (currentMode === 'COUNTRIES') return;
+    const grid = document.getElementById('main-grid');
+    grid.style.opacity = '0';
+    setTimeout(() => {
+        renderCountries();
+        grid.scrollLeft = lastScrollPos;
+        grid.style.opacity = '1';
+        setTimeout(updateDynamoEffect, 50);
+    }, 400);
+}
+
+function renderCountries() {
+    currentMode = 'COUNTRIES';
+    const grid = document.getElementById('main-grid');
+    grid.innerHTML = '';
+    document.getElementById('view-title').innerText = "WORLD ARCHIVE";
+    document.getElementById('breadcrumb').style.display = 'none';
+
+    const countries = {};
+    allData.forEach(item => {
+        if (!countries[item.country]) {
+            countries[item.country] = { name: item.country, img: item.img, count: 0 };
         }
+        countries[item.country].count++;
+    });
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDhMAFYZ1IxT6Eni-O5iaeo7bnWF5BCudU",
-            authDomain: "travelcost-77179.firebaseapp.com",
-            projectId: "travelcost-77179",
-            storageBucket: "travelcost-77179.firebasestorage.app",
-            messagingSenderId: "1054821903994",
-            appId: "1:1054821903994:web:7b898875d0bef2e6be15c3"
+    Object.values(countries).forEach((c) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.backgroundImage = `url('${c.img}')`;
+        card.onclick = () => {
+            lastScrollPos = grid.scrollLeft;
+            card.classList.add('exit-active');
+            setTimeout(() => renderPlaces(c.name), 400);
         };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
+        card.innerHTML = `
+            <div class="card-content">
+                <div class="card-sub">${c.count} MEMORIES</div>
+                <h2 class="card-title">${c.name}</h2>
+            </div>`;
+        grid.appendChild(card);
+    });
+    updateDynamoEffect();
+}
 
-        let allData = [];
-        let currentMode = 'COUNTRIES';
-        let activeCountry = '';
+function renderPlaces(country) {
+    currentMode = 'PLACES';
+    activeCountry = country;
+    const grid = document.getElementById('main-grid');
+    grid.innerHTML = '';
+    grid.scrollLeft = 0;
+    document.getElementById('view-title').innerText = country;
+    document.getElementById('breadcrumb').style.display = 'block';
 
-        function renderCountries() {
-            currentMode = 'COUNTRIES';
-            const grid = document.getElementById('main-grid');
-            grid.innerHTML = '';
-            document.getElementById('view-title').innerText = "WORLD ARCHIVE";
-            document.getElementById('breadcrumb').style.display = 'none';
+    const filtered = allData.filter(d => d.country === country);
+    filtered.forEach((p, index) => {
+        const idx = allData.indexOf(p);
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.style.backgroundImage = `url('${p.img}')`;
+        card.innerHTML = `
+            <div class="card-content">
+                ${isEditing ? `<input type="text" class="place-input" value="${p.name}" oninput="updatePlace(${idx}, 'name', this.value)">` : `<h2 class="card-title">${p.name}</h2>`}
+                ${isEditing ? `<textarea class="place-desc" oninput="updatePlace(${idx}, 'notes', this.value)">${p.notes}</textarea>` : `<p class="read-only-text">${p.notes}</p>`}
+                <div style="display:${isEditing ? 'flex' : 'none'}; gap:10px; margin-top:15px;">
+                    <input type="file" style="display:none" onchange="uploadPhoto(this, ${idx})">
+                    <button onclick="this.previousElementSibling.click()" class="btn-mini">Photo</button>
+                    <button onclick="deleteItem(${idx})" class="btn-mini" style="color:#ff4757">Delete</button>
+                </div>
+            </div>`;
+        grid.appendChild(card);
+    });
+    updateDynamoEffect();
+}
 
-            const countries = {};
-            allData.forEach(item => {
-                if (!countries[item.country]) {
-                    countries[item.country] = { name: item.country, img: item.img, count: 0 };
-                }
-                countries[item.country].count++;
-            });
+// --- DATA LOGIC ---
+function createNewItem() {
+    let country = activeCountry;
+    if (currentMode === 'COUNTRIES') {
+        const input = prompt("Enter Country Name:");
+        if (!input) return;
+        country = input.toUpperCase();
+    }
+    allData.push({ country, name: "New Discovery", notes: "", img: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1470" });
+    saveData();
+    renderPlaces(country);
+}
 
-            Object.values(countries).forEach(c => {
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.style.backgroundImage = `url('${c.img}')`;
-                card.onclick = () => renderPlaces(c.name);
-                card.innerHTML = `
-                    <div class="card-content">
-                        <div class="card-sub">${c.count} MEMORIES</div>
-                        <h2 class="card-title">${c.name}</h2>
-                    </div>`;
-                grid.appendChild(card);
-            });
-        }
+function updatePlace(index, field, value) {
+    allData[index][field] = value;
+    saveData();
+}
 
-        function renderPlaces(country) {
-            currentMode = 'PLACES';
-            activeCountry = country;
-            const grid = document.getElementById('main-grid');
-            grid.innerHTML = '';
-            document.getElementById('view-title').innerText = country;
-            document.getElementById('breadcrumb').style.display = 'block';
-
-            const filtered = allData.filter(d => d.country === country);
-            filtered.forEach((p) => {
-                const idx = allData.indexOf(p);
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.style.backgroundImage = `url('${p.img}')`;
-                
-                card.innerHTML = `
-                    <div class="card-content">
-                        ${isEditing ? 
-                            `<input type="text" class="place-input" value="${p.name}" oninput="updatePlace(${idx}, 'name', this.value)">` :
-                            `<h2 class="card-title">${p.name}</h2>`
-                        }
-                        ${isEditing ? 
-                            `<textarea class="place-desc" oninput="updatePlace(${idx}, 'notes', this.value)">${p.notes}</textarea>` :
-                            `<p class="read-only-text">${p.notes}</p>`
-                        }
-                        <div style="display:${isEditing ? 'flex' : 'none'}; gap:10px; margin-top:15px;">
-                            <input type="file" style="display:none" onchange="uploadPhoto(this, ${idx})">
-                            <button onclick="this.previousElementSibling.click()" class="btn-mini">Photo</button>
-                            <button onclick="deleteItem(${idx})" class="btn-mini" style="color:#ff4757">Delete</button>
-                        </div>
-                    </div>`;
-                grid.appendChild(card);
-            });
-        }
-
-        function createNewItem() {
-            let country = activeCountry;
-            if (currentMode === 'COUNTRIES') {
-                country = prompt("Enter Country Name:").toUpperCase();
-                if (!country) return;
-            }
-            allData.push({
-                country: country,
-                name: "New Discovery",
-                notes: "",
-                img: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1470"
-            });
+function uploadPhoto(input, index) {
+    const file = input.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            allData[index].img = e.target.result;
             saveData();
-            renderPlaces(country);
-        }
+            renderPlaces(activeCountry);
+        };
+        reader.readAsDataURL(file);
+    }
+}
 
-        function updatePlace(index, field, value) {
-            allData[index][field] = value;
-            saveData();
-        }
+function deleteItem(index) {
+    if(confirm("Permanently erase this memory?")) {
+        const country = allData[index].country;
+        allData.splice(index, 1);
+        saveData();
+        allData.some(d => d.country === country) ? renderPlaces(country) : renderCountries();
+    }
+}
 
-        function uploadPhoto(input, index) {
-            const file = input.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    allData[index].img = e.target.result;
-                    saveData();
-                    renderPlaces(activeCountry);
-                };
-                reader.readAsDataURL(file);
-            }
-        }
+async function saveData() { if(isEditing) await db.collection("journals").doc("final_archive").set({ data: allData }); }
 
-        function deleteItem(index) {
-            if(confirm("Permanently erase this memory?")) {
-                const country = allData[index].country;
-                allData.splice(index, 1);
-                saveData();
-                const stillHasPlaces = allData.some(d => d.country === country);
-                stillHasPlaces ? renderPlaces(country) : renderCountries();
-            }
-        }
+async function loadData() {
+    const doc = await db.collection("journals").doc("final_archive").get();
+    if (doc.exists) {
+        allData = doc.data().data || [];
+    }
+    renderCountries();
+}
 
-        async function saveData() {
-            if(!isEditing) return;
-            await db.collection("journals").doc("final_archive").set({ data: allData });
-        }
-
-        async function loadData() {
-            const doc = await db.collection("journals").doc("final_archive").get();
-            if (doc.exists) allData = doc.data().data || [];
-            renderCountries();
-        }
+window.onload = loadData;
 
         window.onload = loadData;
     </script>

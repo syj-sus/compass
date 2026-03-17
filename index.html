@@ -6,148 +6,61 @@
     <title>COMPASS● | Global Archive</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg: #0e1012;
-            --accent: #e67e22;
-            --text: #ffffff;
-            --card-radius: 24px;
-        }
-
+        :root { --bg: #0e1012; --accent: #e67e22; --text: #ffffff; --card-radius: 24px; }
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { 
-            margin: 0; 
-            background: var(--bg); 
-            color: var(--text); 
-            font-family: 'Montserrat', sans-serif; 
-            overflow: hidden; 
-            height: 100vh;
-        }
-
-        .hero-bg {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.75)), 
-                        url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1470') center/cover;
-            z-index: -1;
-        }
-
+        body { margin: 0; background: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; overflow: hidden; height: 100vh; }
+        
+        .hero-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.75)), url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1470') center/cover; z-index: -1; }
+        
         .logo { font-weight: 900; letter-spacing: 6px; font-size: 24px; color: var(--accent); cursor: pointer; display: flex; align-items: center; }
-        .dot { 
-            display: inline-block; 
-            margin-left: 10px;
-            animation: swing 2.5s ease-in-out infinite;
-        }
-        @keyframes swing {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(12px); filter: drop-shadow(-5px 0 10px var(--accent)); }
-        }
+        .dot { display: inline-block; margin-left: 10px; animation: swing 2.5s ease-in-out infinite; }
+        @keyframes swing { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(12px); filter: drop-shadow(-5px 0 10px var(--accent)); } }
 
-        .navbar {
-            position: fixed; top: 0; width: 100%; z-index: 100;
-            display: flex; align-items: center; justify-content: space-between; 
-            padding: 30px 60px; background: linear-gradient(to bottom, rgba(14,16,18,1), transparent);
-        }
-
+        .navbar { position: fixed; top: 0; width: 100%; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 30px 60px; background: linear-gradient(to bottom, rgba(14,16,18,1), transparent); }
         .mode-tag { font-size: 10px; border: 1px solid var(--accent); padding: 4px 8px; border-radius: 4px; color: var(--accent); display: none; }
 
         .header-section { padding: 140px 60px 0 60px; z-index: 10; position: relative; }
         .breadcrumb { font-size: 10px; font-weight: 900; color: var(--accent); cursor: pointer; margin-bottom: 8px; letter-spacing: 2px; }
         .title-display { font-size: clamp(30px, 6vw, 70px); font-weight: 900; letter-spacing: -2px; margin: 0; text-transform: uppercase; }
 
-        .grid {
-            display: flex;
-            flex-wrap: nowrap;
-            overflow-x: auto;
-            width: 100vw;
-            height: 60vh;
-            padding: 0 42vw;
-            align-items: center;
-            gap: 50px;
-            scroll-snap-type: x proximity;
-            perspective: 2000px;
-            scrollbar-width: none;
-            -webkit-overflow-scrolling: touch;
-            opacity: 1;
-            transition: opacity 0.4s ease;
-        }
+        .grid { display: flex; flex-wrap: nowrap; overflow-x: auto; width: 100vw; height: 60vh; padding: 0 42vw; align-items: center; gap: 50px; perspective: 2000px; scrollbar-width: none; -webkit-overflow-scrolling: touch; transition: opacity 0.4s ease; }
         .grid::-webkit-scrollbar { display: none; }
 
-        .card {
-            flex: 0 0 350px;
-            height: 480px;
-            background-size: cover;
-            background-position: center;
-            border-radius: var(--card-radius);
-            position: relative;
-            transform-style: preserve-3d;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: opacity 0.4s ease;
-        }
-        .card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 50%, rgba(0,0,0,0.9)); border-radius: var(--card-radius); }
-        .card-content { position: absolute; bottom: 0; padding: 35px; z-index: 2; width: 100%; }
+        .card { flex: 0 0 350px; height: 480px; background-size: cover; background-position: center; border-radius: var(--card-radius); position: relative; transform-style: preserve-3d; border: 1px solid rgba(255,255,255,0.05); transition: opacity 0.4s ease; }
+        .card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 40%, rgba(0,0,0,0.95)); border-radius: var(--card-radius); }
+        .card-content { position: absolute; bottom: 0; padding: 25px; z-index: 2; width: 100%; }
 
-        .place-input { background: transparent; border: none; color: white; font-weight: 900; font-size: 24px; width: 100%; outline: none; }
-        .place-desc { background: transparent; border: none; color: #ccc; width: 100%; height: 60px; resize: none; outline: none; margin-top: 10px; font-family: inherit; font-size: 13px; }
+        /* Admin Input Styles */
+        .admin-input { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 5px; width: 100%; font-size: 11px; margin-bottom: 5px; border-radius: 4px; outline: none; }
+        .place-title { font-weight: 900; font-size: 22px; margin: 0; text-transform: uppercase; }
+        .place-notes { font-size: 13px; opacity: 0.7; line-height: 1.4; margin-top: 5px; }
 
-        .compass-container {
-            position: fixed;
-            bottom: 50px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 250px;
-            height: 40px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            z-index: 200;
-        }
-
+        .compass-container { position: fixed; bottom: 50px; left: 50%; transform: translateX(-50%); width: 250px; height: 40px; display: flex; flex-direction: column; align-items: center; z-index: 200; }
         .scroll-track { width: 100%; height: 1px; background: rgba(255,255,255,0.2); position: relative; cursor: pointer; }
-
-        .needle-handle {
-            position: absolute; top: -20px; left: 0; width: 12px; height: 40px;
-            background: linear-gradient(to bottom, var(--accent) 50%, #111 50%);
-            clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
-            pointer-events: none; display: flex; flex-direction: column;
-            justify-content: space-between; align-items: center; padding: 3px 0;
-            transform: translateX(-50%);
-        }
-
-        .needle-handle::before { content: 'N'; font-size: 7px; font-weight: 900; color: #fff; }
-        .needle-handle::after { content: 'S'; font-size: 7px; font-weight: 900; color: #fff; }
+        .needle-handle { position: absolute; top: -20px; left: 0; width: 12px; height: 40px; background: linear-gradient(to bottom, var(--accent) 50%, #111 50%); clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%); display: flex; flex-direction: column; justify-content: space-between; align-items: center; padding: 3px 0; transform: translateX(-50%); pointer-events: none; }
+        .needle-handle::before, .needle-handle::after { content: 'N'; font-size: 7px; font-weight: 900; color: #fff; }
+        .needle-handle::after { content: 'S'; }
 
         .fab { position: fixed; bottom: 40px; right: 40px; background: var(--accent); color: white; width: 60px; height: 60px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; border: none; z-index: 101; box-shadow: 0 10px 20px rgba(230, 126, 34, 0.4); }
 
-        @media (max-width: 768px) {
-            .navbar { padding: 20px; }
-            .grid { padding: 0 15vw; }
-            .card { flex: 0 0 280px; height: 400px; }
-            .compass-container { width: 180px; bottom: 30px; }
-        }
+        @media (max-width: 768px) { .grid { padding: 0 15vw; } .card { flex: 0 0 280px; height: 400px; } }
     </style>
 </head>
 <body>
-
     <div class="hero-bg"></div>
-
     <nav class="navbar">
         <div class="logo" onclick="smoothGoBack()">COMPASS<span class="dot">●</span></div>
         <div id="mode-indicator" class="mode-tag">ADMIN</div>
     </nav>
-
     <header class="header-section">
         <div id="breadcrumb" class="breadcrumb" onclick="smoothGoBack()">← RETURN TO WORLD</div>
         <h1 id="view-title" class="title-display">WORLD ARCHIVE</h1>
     </header>
-    
     <main id="main-grid" class="grid"></main>
-
     <div class="compass-container">
-        <div class="scroll-track" id="track">
-            <div id="needle" class="needle-handle"></div>
-        </div>
+        <div class="scroll-track" id="track"><div id="needle" class="needle-handle"></div></div>
         <div style="font-size: 7px; letter-spacing: 3px; margin-top: 12px; opacity: 0.3;">HORIZON SCAN</div>
     </div>
-
     <button id="add-btn" class="fab" onclick="createNewItem()">+</button>
 
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -157,17 +70,20 @@
         const mainGrid = document.getElementById('main-grid');
         const needle = document.getElementById('needle');
         const track = document.getElementById('track');
+        let allData = [], currentMode = 'COUNTRIES', activeCountry = '', lastScrollPos = 0;
 
-        let allData = [];
-        let currentMode = 'COUNTRIES';
-        let activeCountry = '';
-        let lastScrollPos = 0;
-
+        // ADMIN LOGIC
         const urlParams = new URLSearchParams(window.location.search);
-        const isEditing = urlParams.get('edit') === 'true';
+        let isEditing = urlParams.get('edit') === 'true';
         if(isEditing) {
-            document.getElementById('mode-indicator').style.display = 'block';
-            document.getElementById('add-btn').style.display = 'flex';
+            const pass = prompt("Enter Admin Password:");
+            if(pass === "/compass0105") {
+                document.getElementById('mode-indicator').style.display = 'block';
+                document.getElementById('add-btn').style.display = 'flex';
+            } else {
+                alert("Incorrect. View-only mode.");
+                isEditing = false;
+            }
         }
 
         const firebaseConfig = {
@@ -182,11 +98,9 @@
         const db = firebase.firestore();
 
         async function loadData() {
-            try {
-                const doc = await db.collection("journals").doc("final_archive").get();
-                if (doc.exists) allData = doc.data().data || [];
-                renderCountries();
-            } catch (err) { console.error(err); }
+            const doc = await db.collection("journals").doc("final_archive").get();
+            if (doc.exists) allData = doc.data().data || [];
+            renderCountries();
         }
 
         function renderCountries() {
@@ -194,78 +108,78 @@
             mainGrid.innerHTML = '';
             document.getElementById('view-title').innerText = "WORLD ARCHIVE";
             document.getElementById('breadcrumb').style.display = 'none';
-
             const summary = {};
             allData.forEach(item => {
                 if (!summary[item.country]) summary[item.country] = { name: item.country, img: item.img, count: 0 };
                 summary[item.country].count++;
             });
-
             Object.values(summary).forEach(c => {
                 const card = document.createElement('div');
                 card.className = 'card';
                 card.style.backgroundImage = `url('${c.img}')`;
                 card.onclick = () => { lastScrollPos = mainGrid.scrollLeft; renderPlaces(c.name); };
-                card.innerHTML = `<div class="card-content"><div style="font-size:10px; color:var(--accent); font-weight:700;">${c.count} ITEMS</div><h2 style="text-transform:uppercase; margin:0; font-size:32px;">${c.name}</h2></div>`;
+                card.innerHTML = `<div class="card-content"><div style="font-size:10px; color:var(--accent); font-weight:700;">${c.count} ITEMS</div><h2 class="place-title">${c.name}</h2></div>`;
                 mainGrid.appendChild(card);
             });
             setTimeout(() => { mainGrid.scrollLeft = lastScrollPos; updateDynamo(); }, 60);
         }
 
         function renderPlaces(country) {
-            currentMode = 'PLACES';
-            activeCountry = country;
+            currentMode = 'PLACES'; activeCountry = country;
             mainGrid.innerHTML = '';
             document.getElementById('view-title').innerText = country;
             document.getElementById('breadcrumb').style.display = 'block';
             mainGrid.scrollLeft = 0;
-
-            allData.filter(d => d.country === country).forEach(p => {
-                const idx = allData.indexOf(p);
-                const card = document.createElement('div');
-                card.className = 'card';
-                card.style.backgroundImage = `url('${p.img}')`;
-                card.innerHTML = `
-                    <div class="card-content">
-                        ${isEditing ? `<input class="place-input" value="${p.name}" oninput="allData[${idx}].name=this.value; saveData()">` : `<h2 style="text-transform:uppercase; margin:0;">${p.name}</h2>`}
-                        ${isEditing ? `<textarea class="place-desc" oninput="allData[${idx}].notes=this.value; saveData()">${p.notes}</textarea>` : `<p style="font-size:13px; opacity:0.7;">${p.notes}</p>`}
-                        ${isEditing ? `<button onclick="deleteItem(${idx})" style="margin-top:10px; background:none; border:1px solid red; color:red; cursor:pointer; font-size:10px; padding:4px;">DELETE</button>` : ''}
-                    </div>`;
-                mainGrid.appendChild(card);
+            allData.forEach((p, idx) => {
+                if(p.country === country) {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.style.backgroundImage = `url('${p.img}')`;
+                    if(isEditing) {
+                        card.innerHTML = `
+                            <div class="card-content">
+                                <input class="admin-input" value="${p.img}" placeholder="Image URL" onchange="updateItem(${idx}, 'img', this.value)">
+                                <input class="admin-input" style="font-weight:900" value="${p.name}" placeholder="Place Name" onchange="updateItem(${idx}, 'name', this.value)">
+                                <textarea class="admin-input" style="height:60px" placeholder="Notes" onchange="updateItem(${idx}, 'notes', this.value)">${p.notes}</textarea>
+                                <button onclick="deleteItem(${idx})" style="background:red; color:white; border:none; padding:4px 8px; font-size:9px; border-radius:4px; cursor:pointer;">DELETE</button>
+                            </div>`;
+                    } else {
+                        card.innerHTML = `<div class="card-content"><h2 class="place-title">${p.name}</h2><p class="place-notes">${p.notes}</p></div>`;
+                    }
+                    mainGrid.appendChild(card);
+                }
             });
             setTimeout(updateDynamo, 60);
         }
 
-        async function saveData() { if(isEditing) await db.collection("journals").doc("final_archive").set({ data: allData }); }
+        async function updateItem(idx, key, val) {
+            allData[idx][key] = val;
+            await db.collection("journals").doc("final_archive").set({ data: allData });
+            if(key === 'img') renderPlaces(activeCountry); // Refresh UI to show new image
+        }
 
-        function createNewItem() {
-            let country = activeCountry || prompt("Country Name:").toUpperCase();
+        async function createNewItem() {
+            let country = activeCountry || prompt("Enter Country:").toUpperCase();
             if(!country) return;
-            allData.push({ country, name: "New Place", notes: "", img: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=1470" });
-            saveData();
+            allData.push({ country, name: "New Location", notes: "Add details here...", img: "https://images.unsplash.com/photo-1488646953014-85cb44e25828" });
+            await db.collection("journals").doc("final_archive").set({ data: allData });
             renderPlaces(country);
         }
 
-        function deleteItem(idx) {
-            if(confirm("Erase memory?")) {
+        async function deleteItem(idx) {
+            if(confirm("Permanently delete this memory?")) {
                 const c = allData[idx].country;
                 allData.splice(idx, 1);
-                saveData();
+                await db.collection("journals").doc("final_archive").set({ data: allData });
                 allData.some(d => d.country === c) ? renderPlaces(c) : renderCountries();
             }
         }
 
-        function smoothGoBack() {
-            if (currentMode === 'PLACES') {
-                mainGrid.style.opacity = '0';
-                setTimeout(() => { renderCountries(); mainGrid.style.opacity = '1'; }, 150);
-            }
-        }
+        function smoothGoBack() { if (currentMode === 'PLACES') { mainGrid.style.opacity = '0'; setTimeout(() => { renderCountries(); mainGrid.style.opacity = '1'; }, 150); } }
 
         function updateDynamo() {
             const cards = document.querySelectorAll('.card');
             const centerX = window.innerWidth / 2;
-
             cards.forEach(card => {
                 const rect = card.getBoundingClientRect();
                 const cardMid = rect.left + rect.width / 2;
@@ -273,7 +187,6 @@
                 card.style.transform = `rotateY(${distance * 45}deg) translateZ(${Math.abs(distance) * -150}px) scale(${1 - Math.abs(distance) * 0.15})`;
                 card.style.opacity = 1 - Math.abs(distance) * 0.6;
             });
-
             const maxScroll = mainGrid.scrollWidth - mainGrid.clientWidth;
             const scrollPercent = maxScroll > 0 ? (mainGrid.scrollLeft / maxScroll) * 100 : 0;
             needle.style.left = `${Math.max(0, Math.min(scrollPercent, 100))}%`;

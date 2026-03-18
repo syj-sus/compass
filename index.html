@@ -71,6 +71,8 @@
 
     <button id="add-btn" class="fab" onclick="createNewItem()">+</button>
 
+    <input type="file" id="image-upload" accept="image/*,image/webp" style="display:none" onchange="handleFileUpload(event)">
+
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
@@ -80,6 +82,7 @@
         const track = document.getElementById('track');
         let allData = [], currentMode = 'COUNTRIES', activeCountry = '', lastScrollPos = 0;
         let isEditing = false;
+        let pendingUploadIdx = null; // Track which card is being updated
 
         const firebaseConfig = {
             apiKey: "AIzaSyDhMAFYZ1IxT6Eni-O5iaeo7bnWF5BCudU",
@@ -145,11 +148,15 @@
                 if(p.country === country) {
                     const card = document.createElement('div');
                     card.className = 'card';
+                    card.id = `card-${idx}`;
                     card.style.backgroundImage = `url('${p.img}')`;
                     if(isEditing) {
                         card.innerHTML = `
-                            <div class="card-content" style="background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);">
-                                <input class="admin-input" value="${p.img}" placeholder="Image URL" onchange="updateItem(${idx}, 'img', this.value)">
+                            <div class="card-content" style="background: rgba(0,0,0,0.8); backdrop-filter: blur(12px);">
+                                <div style="display:flex; gap:5px; margin-bottom:5px;">
+                                    <input class="admin-input" id="img-path-${idx}" value="${p.img}" placeholder="Image URL" onchange="updateItem(${idx}, 'img', this.value)" style="flex:1;">
+                                    <button onclick="triggerUpload(${idx})" style="background:var(--accent); border:none; border-radius:4px; color:white; padding:0 10px; cursor:pointer; font-size:10px;">UPLOAD</button>
+                                </div>
                                 <input class="admin-input" style="font-weight:900; color:var(--accent);" value="${p.name}" placeholder="Place Name" onchange="updateItem(${idx}, 'name', this.value)">
                                 <textarea class="admin-input" style="height:60px" placeholder="Notes" onchange="updateItem(${idx}, 'notes', this.value)">${p.notes}</textarea>
                                 <button onclick="deleteItem(${idx})" style="width:100%; background:#c0392b; color:white; border:none; padding:8px; font-weight:900; border-radius:4px; cursor:pointer;">DELETE</button>
@@ -162,6 +169,28 @@
             });
             setTimeout(updateDynamo, 100);
         }
+
+        // --- NEW UPLOAD LOGIC ---
+        function triggerUpload(idx) {
+            pendingUploadIdx = idx;
+            document.getElementById('image-upload').click();
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64Image = e.target.result;
+                updateItem(pendingUploadIdx, 'img', base64Image);
+                // Immediately update card background visually
+                document.getElementById(`card-${pendingUploadIdx}`).style.backgroundImage = `url('${base64Image}')`;
+                document.getElementById(`img-path-${pendingUploadIdx}`).value = "Local Upload Loaded";
+            };
+            reader.readAsDataURL(file);
+        }
+        // ------------------------
 
         function updateItem(idx, key, val) {
             allData[idx][key] = val;
@@ -176,7 +205,8 @@
                 btn.innerText = "SAVED ✓";
                 setTimeout(() => btn.innerText = "SYNC ARCHIVE", 2000);
             } catch (e) {
-                alert("Error saving to database.");
+                console.error(e);
+                alert("Error saving. If using high-res uploads, data might be too large for a single Firestore doc.");
                 btn.innerText = "SYNC ERROR";
             }
         }
@@ -219,7 +249,6 @@
             needle.style.left = `${scrollPercent}%`;
         }
 
-        // DRAG LOGIC
         let isDown = false, startX, scrollLeft;
         mainGrid.addEventListener('mousedown', (e) => { isDown = true; startX = e.pageX - mainGrid.offsetLeft; scrollLeft = mainGrid.scrollLeft; mainGrid.style.cursor = 'grabbing'; });
         mainGrid.addEventListener('mouseleave', () => isDown = false);

@@ -19,78 +19,30 @@
         .navbar { position: fixed; top: 0; width: 100%; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 30px 60px; background: linear-gradient(to bottom, rgba(14,16,18,1), transparent); }
         .mode-tag { font-size: 10px; border: 1px solid var(--accent); padding: 4px 8px; border-radius: 4px; color: var(--accent); display: none; }
 
+        .save-sync-btn { position: fixed; top: 30px; right: 140px; background: #27ae60; color: white; padding: 10px 20px; border-radius: 50px; font-size: 10px; font-weight: 900; letter-spacing: 2px; border: none; cursor: pointer; z-index: 1000; display: none; box-shadow: 0 4px 15px rgba(39, 174, 96, 0.3); transition: all 0.3s ease; }
+        .save-sync-btn:hover { transform: translateY(-2px); background: #2ecc71; }
+
         .header-section { padding: 140px 60px 0 60px; z-index: 10; position: relative; }
         .breadcrumb { font-size: 10px; font-weight: 900; color: var(--accent); cursor: pointer; margin-bottom: 8px; letter-spacing: 2px; }
         .title-display { font-size: clamp(30px, 6vw, 70px); font-weight: 900; letter-spacing: -2px; margin: 0; text-transform: uppercase; }
 
-        .grid { display: flex; flex-wrap: nowrap; overflow-x: auto; width: 100vw; height: 60vh; padding: 0 42vw; align-items: center; gap: 50px; perspective: 2000px; scrollbar-width: none; -webkit-overflow-scrolling: touch; transition: opacity 0.4s ease; }
+        .grid { display: flex; flex-wrap: nowrap; overflow-x: auto; width: 100vw; height: 60vh; padding: 0 42vw; align-items: center; gap: 50px; perspective: 2000px; scrollbar-width: none; -webkit-overflow-scrolling: touch; transition: opacity 0.4s ease; cursor: grab; }
         .grid::-webkit-scrollbar { display: none; }
 
         .card { flex: 0 0 350px; height: 480px; background-size: cover; background-position: center; border-radius: var(--card-radius); position: relative; transform-style: preserve-3d; border: 1px solid rgba(255,255,255,0.05); transition: opacity 0.4s ease; }
         .card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(transparent 40%, rgba(0,0,0,0.95)); border-radius: var(--card-radius); }
-        .card-content { position: absolute; bottom: 0; padding: 25px; z-index: 2; width: 100%; }
+        .card-content { position: absolute; bottom: 0; padding: 25px; z-index: 2; width: 100%; border-radius: 0 0 var(--card-radius) var(--card-radius); }
 
-        /* Admin Input Styles */
-        .admin-input { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 5px; width: 100%; font-size: 11px; margin-bottom: 5px; border-radius: 4px; outline: none; }
+        .admin-input { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; padding: 8px; width: 100%; font-size: 11px; margin-bottom: 5px; border-radius: 4px; outline: none; font-family: inherit; }
         .place-title { font-weight: 900; font-size: 22px; margin: 0; text-transform: uppercase; }
         .place-notes { font-size: 13px; opacity: 0.7; line-height: 1.4; margin-top: 5px; }
 
+        .compass-container { position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%); width: 300px; display: flex; flex-direction: column; align-items: center; z-index: 200; }
+        .scroll-track { width: 100%; height: 2px; background: rgba(255,255,255,0.1); position: relative; cursor: pointer; border-radius: 2px; }
+        .scroll-track::before { content: ''; position: absolute; top: -10px; width: 100%; height: 20px; background-image: linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px); background-size: 10% 100%; }
         
-         /* PC Scrollbar Styling (The "Invisible" Track) */
-#main-grid {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* IE */
-    cursor: grab; /* Shows user they can click and drag */
-}
-#main-grid:active { cursor: grabbing; }
-
-/* Enhanced Compass Indicator */
-.compass-container {
-    bottom: 40px;
-    width: 300px;
-    transition: all 0.3s ease;
-}
-
-.scroll-track {
-    height: 2px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 2px;
-    overflow: visible;
-}
-
-.needle-handle {
-    width: 2px; /* Thinner, more precise */
-    height: 50px;
-    top: -25px;
-    background: var(--accent);
-    clip-path: none; /* Removing old triangle for a "Scanner Line" look */
-    box-shadow: 0 0 15px var(--accent);
-    transition: left 0.1s ease-out;
-}
-
-/* Add tick marks to the track for a "Camera Scale" aesthetic */
-.scroll-track::before {
-    content: '';
-    position: absolute;
-    top: -10px;
-    width: 100%;
-    height: 20px;
-    background-image: linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px);
-    background-size: 10% 100%; /* Creates 10 tick marks */
-}
-
-/* Subtle Glow for the Active Section */
-.needle-handle::after {
-    content: 'SCANNING';
-    position: absolute;
-    bottom: -20px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 8px;
-    letter-spacing: 2px;
-    color: var(--accent);
-    white-space: nowrap;
-}
+        .needle-handle { position: absolute; top: -25px; left: 0; width: 2px; height: 50px; background: var(--accent); box-shadow: 0 0 15px var(--accent); transform: translateX(-50%); transition: left 0.1s ease-out; }
+        .needle-handle::after { content: 'SCANNING'; position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); font-size: 8px; letter-spacing: 2px; color: var(--accent); white-space: nowrap; }
 
         .fab { position: fixed; bottom: 40px; right: 40px; background: var(--accent); color: white; width: 60px; height: 60px; border-radius: 50%; display: none; align-items: center; justify-content: center; font-size: 30px; cursor: pointer; border: none; z-index: 101; box-shadow: 0 10px 20px rgba(230, 126, 34, 0.4); }
 
@@ -102,16 +54,21 @@
     <nav class="navbar">
         <div class="logo" onclick="smoothGoBack()">COMPASS<span class="dot">●</span></div>
         <div id="mode-indicator" class="mode-tag">ADMIN</div>
+        <button id="save-all-btn" class="save-sync-btn" onclick="saveToFirebase()">SYNC ARCHIVE</button>
     </nav>
+
     <header class="header-section">
         <div id="breadcrumb" class="breadcrumb" onclick="smoothGoBack()">← RETURN TO WORLD</div>
         <h1 id="view-title" class="title-display">WORLD ARCHIVE</h1>
     </header>
+
     <main id="main-grid" class="grid"></main>
+
     <div class="compass-container">
         <div class="scroll-track" id="track"><div id="needle" class="needle-handle"></div></div>
         <div style="font-size: 7px; letter-spacing: 3px; margin-top: 12px; opacity: 0.3;">HORIZON SCAN</div>
     </div>
+
     <button id="add-btn" class="fab" onclick="createNewItem()">+</button>
 
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
@@ -122,27 +79,7 @@
         const needle = document.getElementById('needle');
         const track = document.getElementById('track');
         let allData = [], currentMode = 'COUNTRIES', activeCountry = '', lastScrollPos = 0;
-
-         // IMPROVED ADMIN LOGIC
-const urlParams = new URLSearchParams(window.location.search);
-let isEditing = false;
-
-function checkAdminStatus() {
-    if (urlParams.get('edit') === 'true') {
-        const pass = prompt("Enter Admin Password:");
-        if (pass === "/compass0105") {
-            isEditing = true;
-            document.getElementById('mode-indicator').style.display = 'block';
-            document.getElementById('add-btn').style.display = 'flex';
-        } else {
-            alert("Incorrect. View-only mode.");
-            isEditing = false;
-        }
-    }
-}
-
-// Call this immediately
-checkAdminStatus();
+        let isEditing = false;
 
         const firebaseConfig = {
             apiKey: "AIzaSyDhMAFYZ1IxT6Eni-O5iaeo7bnWF5BCudU",
@@ -155,7 +92,23 @@ checkAdminStatus();
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
+        function checkAdminStatus() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('edit') === 'true') {
+                const pass = prompt("Enter Admin Password:");
+                if(pass === "/compass0105") {
+                    isEditing = true;
+                    document.getElementById('mode-indicator').style.display = 'block';
+                    document.getElementById('add-btn').style.display = 'flex';
+                    document.getElementById('save-all-btn').style.display = 'block';
+                } else {
+                    alert("Incorrect Password.");
+                }
+            }
+        }
+
         async function loadData() {
+            checkAdminStatus();
             const doc = await db.collection("journals").doc("final_archive").get();
             if (doc.exists) allData = doc.data().data || [];
             renderCountries();
@@ -182,131 +135,96 @@ checkAdminStatus();
             setTimeout(() => { mainGrid.scrollLeft = lastScrollPos; updateDynamo(); }, 60);
         }
 
-function renderPlaces(country) {
-    currentMode = 'PLACES'; 
-    activeCountry = country;
-    mainGrid.innerHTML = '';
-    document.getElementById('view-title').innerText = country;
-    document.getElementById('breadcrumb').style.display = 'block';
-    
-    // Reset scroll position for the new set of cards
-    mainGrid.scrollLeft = 0;
-
-    allData.forEach((p, idx) => {
-        if(p.country === country) {
-            const card = document.createElement('div');
-            card.className = 'card';
-            card.style.backgroundImage = `url('${p.img}')`;
-            
-            if(isEditing) {
-                card.innerHTML = `
-                    <div class="card-content" style="background: rgba(0,0,0,0.6); backdrop-filter: blur(5px);">
-                        <input class="admin-input" value="${p.img}" placeholder="Image URL" onchange="updateItem(${idx}, 'img', this.value)">
-                        <input class="admin-input" style="font-weight:900; color:var(--accent);" value="${p.name}" placeholder="Place Name" onchange="updateItem(${idx}, 'name', this.value)">
-                        <textarea class="admin-input" style="height:60px" placeholder="Notes" onchange="updateItem(${idx}, 'notes', this.value)">${p.notes}</textarea>
-                        <button onclick="deleteItem(${idx})" style="width:100%; background:#c0392b; color:white; border:none; padding:8px; font-weight:900; border-radius:4px; cursor:pointer; margin-top:5px;">DELETE ENTRY</button>
-                    </div>`;
-            } else {
-                card.innerHTML = `<div class="card-content"><h2 class="place-title">${p.name}</h2><p class="place-notes">${p.notes}</p></div>`;
-            }
-            mainGrid.appendChild(card);
+        function renderPlaces(country) {
+            currentMode = 'PLACES'; activeCountry = country;
+            mainGrid.innerHTML = '';
+            document.getElementById('view-title').innerText = country;
+            document.getElementById('breadcrumb').style.display = 'block';
+            mainGrid.scrollLeft = 0;
+            allData.forEach((p, idx) => {
+                if(p.country === country) {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.style.backgroundImage = `url('${p.img}')`;
+                    if(isEditing) {
+                        card.innerHTML = `
+                            <div class="card-content" style="background: rgba(0,0,0,0.7); backdrop-filter: blur(8px);">
+                                <input class="admin-input" value="${p.img}" placeholder="Image URL" onchange="updateItem(${idx}, 'img', this.value)">
+                                <input class="admin-input" style="font-weight:900; color:var(--accent);" value="${p.name}" placeholder="Place Name" onchange="updateItem(${idx}, 'name', this.value)">
+                                <textarea class="admin-input" style="height:60px" placeholder="Notes" onchange="updateItem(${idx}, 'notes', this.value)">${p.notes}</textarea>
+                                <button onclick="deleteItem(${idx})" style="width:100%; background:#c0392b; color:white; border:none; padding:8px; font-weight:900; border-radius:4px; cursor:pointer;">DELETE</button>
+                            </div>`;
+                    } else {
+                        card.innerHTML = `<div class="card-content"><h2 class="place-title">${p.name}</h2><p class="place-notes">${p.notes}</p></div>`;
+                    }
+                    mainGrid.appendChild(card);
+                }
+            });
+            setTimeout(updateDynamo, 100);
         }
-    });
 
-    // CRITICAL: Re-initialize the needle and 3D effects for the new cards
-    setTimeout(() => {
-        updateDynamo();
-    }, 100);
-}
-
-
-        async function updateItem(idx, key, val) {
+        function updateItem(idx, key, val) {
             allData[idx][key] = val;
-            await db.collection("journals").doc("final_archive").set({ data: allData });
-            if(key === 'img') renderPlaces(activeCountry); // Refresh UI to show new image
+            console.log("Local update saved. Sync to finalize.");
+        }
+
+        async function saveToFirebase() {
+            const btn = document.getElementById('save-all-btn');
+            btn.innerText = "SYNCING...";
+            try {
+                await db.collection("journals").doc("final_archive").set({ data: allData });
+                btn.innerText = "SAVED ✓";
+                setTimeout(() => btn.innerText = "SYNC ARCHIVE", 2000);
+            } catch (e) {
+                alert("Error saving to database.");
+                btn.innerText = "SYNC ERROR";
+            }
         }
 
         async function createNewItem() {
             let country = activeCountry || prompt("Enter Country:").toUpperCase();
             if(!country) return;
-            allData.push({ country, name: "New Location", notes: "Add details here...", img: "https://images.unsplash.com/photo-1488646953014-85cb44e25828" });
-            await db.collection("journals").doc("final_archive").set({ data: allData });
+            allData.push({ country, name: "New Location", notes: "Details...", img: "https://images.unsplash.com/photo-1488646953014-85cb44e25828" });
             renderPlaces(country);
         }
 
         async function deleteItem(idx) {
-            if(confirm("Permanently delete this memory?")) {
+            if(confirm("Delete this memory?")) {
                 const c = allData[idx].country;
                 allData.splice(idx, 1);
-                await db.collection("journals").doc("final_archive").set({ data: allData });
                 allData.some(d => d.country === c) ? renderPlaces(c) : renderCountries();
             }
         }
 
         function smoothGoBack() { if (currentMode === 'PLACES') { mainGrid.style.opacity = '0'; setTimeout(() => { renderCountries(); mainGrid.style.opacity = '1'; }, 150); } }
 
-         // PC MOUSE WHEEL REDIRECTION
-mainGrid.addEventListener('wheel', (evt) => {
-    evt.preventDefault();
-    mainGrid.scrollLeft += evt.deltaY; // Maps vertical scroll to horizontal
-});
+        mainGrid.addEventListener('wheel', (evt) => {
+            evt.preventDefault();
+            mainGrid.scrollLeft += evt.deltaY;
+            requestAnimationFrame(updateDynamo);
+        });
 
-// IMPROVED DYNAMO (Smooth Indicator & Parallax)
-function updateDynamo() {
-    const cards = document.querySelectorAll('.card');
-    const centerX = window.innerWidth / 2;
-    
-    cards.forEach(card => {
-        const rect = card.getBoundingClientRect();
-        const cardMid = rect.left + rect.width / 2;
-        const distance = (cardMid - centerX) / centerX;
-        
-        // Smoother 3D Perspective
-        card.style.transform = `
-            rotateY(${distance * 35}deg) 
-            translateZ(${Math.abs(distance) * -120}px) 
-            scale(${1 - Math.abs(distance) * 0.1})
-        `;
-        card.style.opacity = 1 - Math.abs(distance) * 0.7;
-    });
+        function updateDynamo() {
+            const cards = document.querySelectorAll('.card');
+            const centerX = window.innerWidth / 2;
+            cards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const cardMid = rect.left + rect.width / 2;
+                const distance = (cardMid - centerX) / centerX;
+                card.style.transform = `rotateY(${distance * 35}deg) translateZ(${Math.abs(distance) * -120}px) scale(${1 - Math.abs(distance) * 0.1})`;
+                card.style.opacity = 1 - Math.abs(distance) * 0.7;
+            });
+            const maxScroll = mainGrid.scrollWidth - mainGrid.clientWidth;
+            const scrollPercent = maxScroll > 0 ? (mainGrid.scrollLeft / maxScroll) * 100 : 0;
+            needle.style.left = `${scrollPercent}%`;
+        }
 
-    // Precision Needle Movement
-    const maxScroll = mainGrid.scrollWidth - mainGrid.clientWidth;
-    const scrollPercent = maxScroll > 0 ? (mainGrid.scrollLeft / maxScroll) * 100 : 0;
-    
-    // Smoothly update the needle position
-    needle.style.left = `${scrollPercent}%`;
-}
-
-let isDown = false;
-let startX;
-let scrollLeft;
-
-mainGrid.addEventListener('mousedown', (e) => {
-    isDown = true;
-    mainGrid.style.cursor = 'grabbing';
-    startX = e.pageX - mainGrid.offsetLeft;
-    scrollLeft = mainGrid.scrollLeft;
-});
-
-mainGrid.addEventListener('mouseleave', () => {
-    isDown = false;
-    mainGrid.style.cursor = 'grab';
-});
-
-mainGrid.addEventListener('mouseup', () => {
-    isDown = false;
-    mainGrid.style.cursor = 'grab';
-});
-
-mainGrid.addEventListener('mousemove', (e) => {
-    if(!isDown) return;
-    e.preventDefault();
-    const x = e.pageX - mainGrid.offsetLeft;
-    const walk = (x - startX) * 2; 
-    mainGrid.scrollLeft = scrollLeft - walk;
-    updateDynamo(); // Keeps the needle moving while dragging
-});
+        // DRAG LOGIC
+        let isDown = false, startX, scrollLeft;
+        mainGrid.addEventListener('mousedown', (e) => { isDown = true; startX = e.pageX - mainGrid.offsetLeft; scrollLeft = mainGrid.scrollLeft; mainGrid.style.cursor = 'grabbing'; });
+        mainGrid.addEventListener('mouseleave', () => isDown = false);
+        mainGrid.addEventListener('mouseup', () => { isDown = false; mainGrid.style.cursor = 'grab'; });
+        mainGrid.addEventListener('mousemove', (e) => { if(!isDown) return; e.preventDefault(); const x = e.pageX - mainGrid.offsetLeft; const walk = (x - startX) * 2; mainGrid.scrollLeft = scrollLeft - walk; updateDynamo(); });
 
         mainGrid.addEventListener('scroll', () => requestAnimationFrame(updateDynamo));
         window.onload = loadData;
